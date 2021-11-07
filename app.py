@@ -1,32 +1,24 @@
-from flask import Flask
+from flask import Flask, request
+from twilio.twiml.messaging_response import MessagingResponse
 
 app = Flask(__name__)
 
 @app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
+def hello():
+    return "Hello, World!"
 
-# from flask import Flask, request
-# from twilio.twiml.messaging_response import MessagingResponse
+@app.route("/sms", methods=['POST'])
+def sms_reply():
+    """Respond to incoming calls with a simple text message."""
+    # Fetch the message
+    msg = request.form.get('Body')
 
-# app = Flask(__name__)
+    # Create reply
+    resp = MessagingResponse()
+    resp.message("You said: {}".format(msg))
 
-# @app.route("/")
-# def hello():
-#     return "Hello, World!"
+    return str(resp)
 
-# @app.route("/sms", methods=['POST'])
-# def sms_reply():
-#     """Respond to incoming calls with a simple text message."""
-#     # Fetch the message
-#     msg = request.form.get('Body')
-
-#     # Create reply
-#     resp = MessagingResponse()
-#     resp.message("You said: {}".format(msg))
-
-#     return str(resp)
-
-# if __name__ == "__main__":
-#     app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)
     
