@@ -9,6 +9,7 @@ from pymongo.database import Database
 load_dotenv()
 logging.basicConfig(level=logging.DEBUG,
                     format=f'[%(asctime)s] [%(levelname)s] [%(name)s] [%(threadName)s] %(message)s')
+log = logging.getLogger('conn')
 
 
 class DatabaseService:
@@ -31,8 +32,5 @@ class DatabaseService:
         self.__connect()
         if chat is None:
             chat = [{'insert': "failed"}]
+        log.info(chat)
         return self.col.insert_many(chat)
-
-
-db = DatabaseService()
-db.insert()
