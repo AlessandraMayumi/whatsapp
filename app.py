@@ -35,7 +35,7 @@ def reply():
         response_msg.body(f'HoHoHo aqui é o Papai Noel, qual é o sei nome?')
 
     elif 'nome' in incoming_msg.lower():
-        response_msg.body(f'Oi {incoming_msg}, aonde você mora?')
+        response_msg.body(f'E, aonde você mora?')
 
     elif 'rua' in incoming_msg.lower() or 'ave' in incoming_msg.lower():
         response_msg.body(f'Qual presente vc gostaria de ganhar do Papai Noel?')
