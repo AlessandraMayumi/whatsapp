@@ -16,14 +16,14 @@ def hello():
 
 
 @app.route("/", methods=['POST'])
-def sms_reply():
-    """Respond to incoming calls with a simple text message."""
-    # Fetch the message
-    msg = request.json
-    app.logger.info(msg)
-    # Create reply
+def reply():
+
+    incoming_msg = request.values.get('Body', '').lower()
+    app.logger.info(f'reply: {incoming_msg}')
+
     resp = MessagingResponse()
-    resp.message("From Python, you said: {}".format(msg))
+    response_msg = resp.message()
+    response_msg.body(f'this is the response text "{incoming_msg}"')
 
     return '', 200
 
