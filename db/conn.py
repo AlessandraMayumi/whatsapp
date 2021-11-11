@@ -27,5 +27,12 @@ class DatabaseService:
         self.db: Database = self.client['myFirstDatabase']
         self.col: Collection = self.db['chats']
 
-    def insert(self, chat):
-        self.col.insert_one(chat)
+    def insert(self, chat=None):
+        self.__connect()
+        if chat is None:
+            chat = [{'insert': "failed"}]
+        return self.col.insert_many(chat)
+
+
+db = DatabaseService()
+db.insert()

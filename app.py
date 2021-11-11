@@ -25,7 +25,8 @@ def reply():
     incoming_to = request.values.get('To', '').lower()
     incoming_msid = request.values.get('MessageSid', '').lower()
 
-    chat = {'body': incoming_msg, 'From': incoming_from, 'To': incoming_to, 'MessageSid': incoming_msid}
+    chat = [{'body': incoming_msg, 'From': incoming_from, 'To': incoming_to, 'MessageSid': incoming_msid}]
+    app.logger.info(chat)
     db.insert(chat)
 
     resp = MessagingResponse()
