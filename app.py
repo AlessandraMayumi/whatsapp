@@ -9,6 +9,8 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG,
                     format=f'[%(asctime)s] [%(levelname)s] [%(name)s] [%(threadName)s] %(message)s')
 
+db = DatabaseService()
+
 
 @app.route("/", methods=['GET'])
 def hello():
@@ -18,10 +20,13 @@ def hello():
 
 @app.route("/", methods=['POST'])
 def reply():
-    db = DatabaseService()
-    db.insert(request.json)
-
     incoming_msg = request.values.get('Body', '').lower()
+    incoming_from = request.values.get('From', '').lower()
+    incoming_to = request.values.get('To', '').lower()
+    incoming_msid = request.values.get('MessageSid', '').lower()
+
+    chat = {'body': incoming_msg, 'From': incoming_from, 'To': incoming_to, 'MessageSid': incoming_msid}
+    db.insert(chat)
 
     resp = MessagingResponse()
     response_msg = resp.message()
