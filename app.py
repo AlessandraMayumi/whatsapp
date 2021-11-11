@@ -19,13 +19,13 @@ def hello():
 def reply():
 
     incoming_msg = request.values.get('Body', '').lower()
-    app.logger.info(f'reply: {incoming_msg}')
+    app.logger.info(f'reply.incoming_msg: {incoming_msg}')
 
     resp = MessagingResponse()
     response_msg = resp.message()
     response_msg.body(f'this is the response text "{incoming_msg}"')
 
-    return '', 200
+    return str(resp)
 
 
 if __name__ == "__main__":
