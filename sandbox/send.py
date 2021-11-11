@@ -1,7 +1,10 @@
 import os
+import logging
 from twilio.rest import Client
 from dotenv import load_dotenv
 
+logging.basicConfig(level=logging.DEBUG, format=f'[%(asctime)s] [%(levelname)s] [%(name)s] [%(threadName)s] %(message)s')
+log = logging.getLogger('send')
 load_dotenv()
 
 # [Twilio console] Account - General settings
@@ -18,4 +21,4 @@ def send_one_way_message():
         to='whatsapp:+5519989711675'
     )
 
-    print(message.sid)
+    log.info(message.sid)

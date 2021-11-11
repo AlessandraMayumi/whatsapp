@@ -1,3 +1,4 @@
+import logging
 from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
 
@@ -5,9 +6,12 @@ from sandbox.send import send_one_way_message
 
 app = Flask(__name__)
 
+logging.basicConfig(level=logging.DEBUG, format=f'[%(asctime)s] [%(levelname)s] [%(name)s] [%(threadName)s] %(message)s')
+
 
 @app.route("/", methods=['GET'])
 def hello():
+    app.logger.info('Hello, World, test')
     return "Hello, World!"
 
 
@@ -16,13 +20,14 @@ def sms_reply():
     """Respond to incoming calls with a simple text message."""
     # Fetch the message
     msg = request.json
-
+    app.logger.info(msg)
     # Create reply
     resp = MessagingResponse()
     resp.message("You said: {}".format(msg))
 
     send_one_way_message()
-    return str(resp)
+    # return str(resp)
+    return '', 200
 
 
 if __name__ == "__main__":
