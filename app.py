@@ -23,10 +23,8 @@ def sms_reply():
     app.logger.info(msg)
     # Create reply
     resp = MessagingResponse()
-    resp.message("You said: {}".format(msg))
+    resp.message("From Python, you said: {}".format(msg))
 
-    send_one_way_message()
-    # return str(resp)
     return '', 200
 
 
