@@ -31,7 +31,7 @@ def reply():
     # find chat or create a new one
     chat = db.find_one(filter={'From': incoming_from})
     if not chat:
-        chat = [{'status': 0, 'from': incoming_from}]
+        chat = {'status': 0, 'from': incoming_from}
         db.insert(chat)
 
     status = chat.status
