@@ -29,29 +29,26 @@ def reply():
     incoming_from = request.values.get('From', '').lower()
 
     # find chat or create a new one
-    chat = db.find_one(filter={'From': incoming_from})
+    chat = db.find_one(filter={'from': incoming_from})
     if not chat:
-        chat = {'status': 0, 'from': incoming_from}
-        db.insert(chat)
+        chat = {'status': 1, 'from': incoming_from, 'name': incoming_msg}
+        db.insert([chat])
+        response_msg.body(f'HoHoHo, aqui é o Papai Noel, qual é o sei nome?')
+        return str(resp)
 
     status = chat['status']
-    chat.status += 1
 
-    # conditional response
-    if not status:
-        response_msg.body(f'HoHoHo, aqui é o Papai Noel, qual é o sei nome?')
-
-    elif status == 1:
+    if status == 1:
         response_msg.body(f'E, aonde você mora?')
-        db.update_one({"From": incoming_from}, {"$set": {"name": incoming_msg}})
+        db.update_one(incoming_from, 'address', incoming_msg, status)
 
     elif status == 2:
         response_msg.body(f'Qual presente vc gostaria de ganhar do Papai Noel?')
-        db.update_one({"From": incoming_from}, {"$set": {"gift": incoming_msg}})
+        db.update_one(incoming_from, 'gift', incoming_msg, status)
 
     elif status == 3:
         response_msg.body(f'Continue se comportando e vc pode ganhar uma surpresa. Feliz Natal!!!')
-        db.update_one({"From": incoming_from}, {"$set": {"last_message": incoming_msg}})
+        db.update_one(incoming_from, 'last_message', incoming_msg, status)
 
     return str(resp)
 

@@ -40,6 +40,7 @@ class DatabaseService:
         self.__connect()
         return self.col.find_one(filter=filter)
 
-    def update_one(self, filter: dict, update: dict):
+    def update_one(self, from_, header, body, status):
         self.__connect()
-        return self.col.update_one(filter, update)
+        status += 1
+        return self.col.update_one({"from": from_}, {"$set": {header: body, "status": status}})
