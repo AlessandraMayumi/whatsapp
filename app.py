@@ -20,27 +20,38 @@ def hello():
 
 @app.route("/", methods=['POST'])
 def reply():
-    incoming_msg = request.values.get('Body', '').lower()
-    incoming_from = request.values.get('From', '').lower()
-    incoming_to = request.values.get('To', '').lower()
-    incoming_msid = request.values.get('MessageSid', '').lower()
-
-    chat = [{'From': incoming_from, 'To': incoming_to, 'Body': incoming_msg, 'MessageSid': incoming_msid}]
-    db.insert(chat)
-
+    # initialize response
     resp = MessagingResponse()
     response_msg = resp.message()
 
-    if incoming_msg == 'oi':
-        response_msg.body(f'HoHoHo aqui é o Papai Noel, qual é o sei nome?')
+    # load incoming request
+    incoming_msg = request.values.get('Body', '').lower()
+    incoming_from = request.values.get('From', '').lower()
 
-    elif 'nome' in incoming_msg.lower():
+    # find chat or create a new one
+    chat = db.find_one(filter={'From': incoming_from})
+    if not chat:
+        chat = [{'status': 0, 'from': incoming_from}]
+        db.insert(chat)
+
+    status = chat.status
+    chat.status += 1
+
+    # conditional response
+    if not status:
+        response_msg.body(f'HoHoHo, aqui é o Papai Noel, qual é o sei nome?')
+
+    elif status == 1:
         response_msg.body(f'E, aonde você mora?')
+        db.update_one({"From": incoming_from}, {"$set": {"name": incoming_msg}})
 
-    elif 'rua' in incoming_msg.lower() or 'ave' in incoming_msg.lower():
+    elif status == 2:
         response_msg.body(f'Qual presente vc gostaria de ganhar do Papai Noel?')
-    else:
-        response_msg.body(f'Feliz Natal')
+        db.update_one({"From": incoming_from}, {"$set": {"gift": incoming_msg}})
+
+    elif status == 3:
+        response_msg.body(f'Continue se comportando e vc pode ganhar uma surpresa. Feliz Natal!!!')
+        db.update_one({"From": incoming_from}, {"$set": {"last_message": incoming_msg}})
 
     return str(resp)
 

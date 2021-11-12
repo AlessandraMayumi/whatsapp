@@ -20,13 +20,14 @@ class DatabaseService:
         self.col = None
 
     def __connect(self):
-        user = os.getenv("MONGO_USER")
-        password = os.getenv("MONGO_PASS")
-        url = f"mongodb+srv://{user}:{password}@cluster0.4mmpg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
-        self.client = MongoClient(url)
-        self.client.server_info()
-        self.db: Database = self.client['myFirstDatabase']
-        self.col: Collection = self.db['chats']
+        if not self.client:
+            user = os.getenv("MONGO_USER")
+            password = os.getenv("MONGO_PASS")
+            url = f"mongodb+srv://{user}:{password}@cluster0.4mmpg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+            self.client = MongoClient(url)
+            self.client.server_info()
+            self.db: Database = self.client['myFirstDatabase']
+            self.col: Collection = self.db['chats']
 
     def insert(self, chat=None):
         self.__connect()
@@ -34,3 +35,11 @@ class DatabaseService:
             chat = [{'insert': "failed"}]
         log.info(chat)
         return self.col.insert_many(chat)
+
+    def find_one(self, filter: dict):
+        self.__connect()
+        return self.col.find_one(filter=filter)
+
+    def update_one(self, filter: dict, update: dict):
+        self.__connect()
+        return self.col.update_one(filter, update)
