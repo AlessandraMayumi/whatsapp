@@ -34,7 +34,7 @@ def reply():
         chat = {'status': 0, 'from': incoming_from}
         db.insert(chat)
 
-    status = chat.status
+    status = chat['status']
     chat.status += 1
 
     # conditional response
