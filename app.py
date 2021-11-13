@@ -2,6 +2,7 @@ import logging
 from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
 
+from api.api import create_gift
 from db.conn import DatabaseService
 
 app = Flask(__name__)
@@ -48,6 +49,7 @@ def reply():
 
     elif status == 3:
         db.update_one(incoming_from, 'gift', incoming_msg, status)
+        create_gift(chat)
         response_msg.body(f'Continue se comportando e vc pode ganhar uma surpresa. Feliz Natal!!!')
     else:
         db.update_one(incoming_from, 'last_message', incoming_msg, status)
