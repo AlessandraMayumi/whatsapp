@@ -21,7 +21,7 @@ def api_create_gift(chat):
         "kidInformation": {
             "name": chat['name'],
             "phone": chat['from'].replace("whatsapp:+", ""),
-            "address": chat['address'],
+            "address": chat['address']
         }
     }
     try:
