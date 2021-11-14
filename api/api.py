@@ -14,18 +14,17 @@ baseUrl = os.getenv("SERVER_ENDPOINT")
 
 def api_create_gift(chat):
     payload = {
-        "title": f'"{chat["gift"]}"',
-        "description": f'"{chat["gift"]}"',
+        "title": chat['gift'],
+        "description": chat['gift'],
         "status": "TO_APPROVE",
         "kidInformation": {
-            "name": f'"{chat["name"]}"',
-            "phone": f'"{chat["from"].replace("whatsapp:+", "")}"',
-            "address": f'"{chat["address"]}"'
+            "name": chat['name'],
+            "phone": chat['from'].replace("whatsapp:+", ""),
+            "address": chat['address']
         }
     }
     try:
-        log.info(payload)
-        requests.post(f'{baseUrl}/gifts', data=payload)
+        requests.post(f'{baseUrl}/gifts', json=payload)
     except Exception as e:
         log.error(e.__str__())
         pass
