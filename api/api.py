@@ -12,7 +12,8 @@ log = logging.getLogger('api')
 baseUrl = os.getenv("SERVER_ENDPOINT")
 
 
-def create_gift(chat):
+def api_create_gift(chat):
+    log.info(chat)
     payload = {
         "title": chat['gift'],
         "description": chat['gift'],
@@ -24,7 +25,7 @@ def create_gift(chat):
         }
     }
     try:
-        requests.post(baseUrl, data=payload)
+        requests.post(f'{baseUrl}/gifts', data=payload)
     except Exception as e:
         log.error(e.__str__())
         pass
