@@ -14,13 +14,13 @@ baseUrl = os.getenv("SERVER_ENDPOINT")
 
 def api_create_gift(chat):
     payload = {
-        "title": chat['gift'],
-        "description": chat['gift'],
+        "title": f'"{chat["gift"]}"',
+        "description": f'"{chat["gift"]}"',
         "status": "TO_APPROVE",
         "kidInformation": {
-            "name": chat['name'],
-            "phone": chat['from'].replace("whatsapp:+", ""),
-            "address": chat['address']
+            "name": f'"{chat["name"]}"',
+            "phone": f'"{chat["from"].replace("whatsapp:+", "")}"',
+            "address": f'"{chat["address"]}"'
         }
     }
     try:
