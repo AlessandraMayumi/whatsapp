@@ -24,7 +24,7 @@ def api_create_gift(chat):
         }
     }
     try:
-        requests.post(f'{baseUrl}/gifts', json=payload)
+        requests.post(f'{baseUrl}gifts', json=payload)
     except Exception as e:
         log.error(e.__str__())
         pass
